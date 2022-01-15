@@ -1,0 +1,168 @@
+﻿@model WebAppFeatures.Models.DataModel.DashBoardInfo
+@using WebAppFeatures.Helpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Dashboard";
+}
+<div class="content">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-5 col-md-4">
+                            <div class="icon-big text-center icon-warning">
+                                <i class="nc-icon nc-zoom-split text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <div class="numbers">
+                                <p class="card-category">viewers</p>
+                                <p class="card-title">@Model.NumViewers<p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer ">
+                    <hr>
+                    @if (Convert.ToInt32(Model.NumViewers) > 0)
+                    {
+                        <button type="submit" class="btn btn-info btn-block btn-round" data-toggle="modal" data-target="#exampleModal">Empty Your Counter</button>
+                    }
+                    else
+                    {
+                        <p class="stats">
+                            No Viewer, You can Share Link Search
+                            <a href="whatsapp://send?text=@ViewBag.Url" data-action="share/whatsapp/share"
+                               target="_blank">
+                                to whatsapp
+                            </a>
+                        </p>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-5 col-md-4">
+                            <div class="icon-big text-center icon-warning">
+                                <i class="nc-icon nc-paper text-success"></i>
+                            </div>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <div class="numbers">
+                                <p class="card-category">Your QR</p>
+                                @if (ViewBag.IsQrExists == "YES")
+                                {<p class="card-title text-success">QR is available</p>}
+                                else if (ViewBag.IsQrExists == "NO")
+                                {<p class="card-title text-danger">QR is not available</p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer ">
+                    <hr>
+                    @if (ViewBag.IsQrExists == "YES")
+                    {
+                        <form method="get" asp-action="DownloadQR" asp-controller="Dashboard">
+                            <button type="submit" class="btn btn-info btn-block btn-round">Download Your QR</button>
+                        </form>
+                    }
+                    else if (ViewBag.IsQrExists == "NO")
+                    {
+                        <p class="stats">You Can Create Your QR From Your <a asp-action="Profile" asp-controller="Dashboard">Profile</a></p>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header ">
+                    <h5 class="card-title">My Account</h5>
+                    <p class="card-category">Informations</p>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Name: </strong>
+                        @Model.User.FullName
+                    </p>
+                    <p>
+                        <strong>Email: </strong>
+                        @Model.User.Email
+                    </p>
+                    <p>
+                        <strong>User Name: </strong>
+                        @Model.User.UserName
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card ">
+                <div class="card-header ">
+                    <h5 class="card-title">Verification</h5>
+                    <p class="card-category">Verification Account Info</p>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Verification Account Date: </strong>
+                        @Model.RegisterVerification.VerificationDate.Value.ToShortDateString()
+                    </p>
+                    <p>
+                        <strong>Verification Account Time: </strong>
+                        @Model.RegisterVerification.VerificationDate.Value.ToShortTimeString()
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card card-chart">
+                <div class="card-header">
+                    <h5 class="card-title">User Token</h5>
+                    <p class="card-category">User Token Info</p>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Generated Token Date: </strong>
+                        @Model.RegisterVerification.GeneratedDate.Value.ToShortDateString()
+                    </p>
+                    <p>
+                        <strong>Generated Token Time: </strong>
+                        @Model.RegisterVerification.GeneratedDate.Value.ToShortTimeString()
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Convert.ToInt32(Model.NumViewers) > 0)
+    {
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Empty Counter</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are You Sure To Empty Your Viewrs Counter?
+                    </div>
+                    <div class="modal-footer">
+                        <form method="post" asp-action="EmptyYourCounter" asp-controller="Dashboard" asp-antiforgery="true">
+                            <button type="submit" class="btn btn-info btn-block btn-round">Empty Your Counter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

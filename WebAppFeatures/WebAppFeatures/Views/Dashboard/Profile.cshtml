@@ -1,0 +1,179 @@
+﻿@model WebAppFeatures.ViewModel.EditUserViewModel
+@using WebAppFeatures.Helpers
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+
+}
+<div class="content">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card card-user">
+                <div class="card-body">
+                    <div class="author">
+                        <a href="@Url.Action("RenderImage","Account",new { Key = Model.Key})" data-lightbox="image-1" data-title="@Model.FullName">
+                            <img class="avatar border-gray" id="myImg" src="@Url.Action("RenderImage","Account", new { Key = Model.Key})" alt="Image">
+                        </a>
+                        <h4 class="title text-primary">@Model.FullName</h4>
+                        <p class="title text-primary">
+                            <div>
+                                @@@Model.UserName
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card text-center">
+                <div class="card-body">
+                    @if (ViewBag.QrGenerated == "OK")
+                    {
+                        <form method="post" asp-action="CreateQR" asp-controller="Dashboard" asp-antiforgery="true">
+                            <button type="submit" class="btn btn-success btn-block btn-round">Create Your QR</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a href="@TempData["QrSrc"]" data-lightbox="image-1" data-title="@Model.FullName">
+                            <img class="img-fluid" id="myImg" src="@TempData["QrSrc"]" alt="Image">
+                        </a>
+                        <form method="post" asp-action="DeleteQR" asp-controller="Dashboard" asp-antiforgery="true">
+                            <button type="submit" class="btn btn-danger btn-block btn-round">Delete Your QR</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card card-user">
+                <div class="card-header">
+                    <h5 class="card-title">Edit Profile</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Dashboard" asp-action="UpdateProfile" asp-antiforgery="true" method="post">
+                        <div class="row">
+                            <div class="col-md-6 pt-1">
+                                <div class="form-group">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <input asp-for="Email" class="form-control" readonly disabled />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pt-1">
+                                <div class="form-group">
+                                    <label asp-for="UserName" class="control-label"></label>
+                                    <input asp-for="UserName" class="form-control" />
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pt-1">
+                                <div class="form-group">
+                                    <label asp-for="FullName" class="control-label"></label>
+                                    <input asp-for="FullName" class="form-control" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pt-1">
+                                <div class="form-group">
+                                    <label asp-for="Gender" class="control-label"></label>
+                                    <select asp-for="Gender" class="form-control"
+                                            asp-items="Html.GetEnumSelectList<Lists.Gender>()">
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pt-1">
+                                <div class="form-group">
+                                    <label asp-for="Country" class="control-label"></label>
+                                    <select asp-for="Country" class="form-control"
+                                            asp-items="Html.GetEnumSelectList<Lists.GetCountryListFromEnum>()">
+                                    </select>
+                                    <span asp-validation-for="Country" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pt-1">
+                                <div class="form-group">
+                                    <label asp-for="City" class="control-label"></label>
+                                    <select asp-for="City" class="form-control"
+                                            asp-items="Html.GetEnumSelectList<Lists.GetCityListFromEnum>()">
+                                    </select>
+                                    <span asp-validation-for="City" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 pt-1">
+                                <button type="submit" id="btnUpdate" class="btn btn-success btn-block btn-round">Update Profile</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pt-1">
+                                <button type="button" class="btn btn-primary btn-block btn-round" data-toggle="modal" data-target="#exampleModal">
+                                    Choose Image
+                                </button>
+                            </div>
+                            <div class="col-md-6 pt-1">
+                                <button type="button" class="btn btn-danger btn-block btn-round" data-toggle="modal" data-target="#DeleteAccount">Delete Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" asp-action="UploadImage" asp-controller="Dashboard" enctype="multipart/form-data" asp-antiforgery="true">
+                    <div class="modal-body">
+                        <div class="row">
+                            <label class="custom-input-btn">
+                                <input type="file" id="fileUpload" name="fileUpload" style="display:none" accept="image/png, image/jpg, image/jpeg">
+                                <img id="imgPreview" src="/images/upload.gif" class="rounded mx-auto d-block" alt="Image" asp-append-version="true">
+                            </label>
+                        </div>
+                        <div class="row">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="Uploadbtn" class="btn btn-round btn-success btn-block">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DeleteAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are You Sure To Delete Your Account?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-round" data-dismiss="modal" aria-label="Close">No</button>
+                    <form method="post" asp-action="DeleteProfile" asp-controller="Dashboard" asp-antiforgery="true">
+                        <button type="submit" class="btn btn-danger btn-round">Yes Delete My Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

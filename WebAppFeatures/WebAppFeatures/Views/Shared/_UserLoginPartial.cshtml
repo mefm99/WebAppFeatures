@@ -1,0 +1,28 @@
+﻿@if (HttpContextAccessor.HttpContext.Session.GetString("UserId") == null)
+{
+<ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@localizer["HomePage"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@localizer["PrivacyPage"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@localizer["LoginPage"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@localizer["RegisterPage"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Search" asp-action="UserInfo">@localizer["SearchPage"]</a>
+    </li>
+</ul>
+}
+else
+{
+    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Logout">@localizer["Logout"]</a>
+        </li>
+    </ul>
+}

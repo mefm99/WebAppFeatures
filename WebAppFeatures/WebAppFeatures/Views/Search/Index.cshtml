@@ -1,0 +1,52 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search User</title>
+    <link href="~/css/Search.css" rel="stylesheet" />
+    <style>
+    </style>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data" asp-action="SearchQR" asp-controller="Dashboard" asp-antiforgery="true">
+        <div id="uploadArea" class="upload-area">
+            <div class="upload-area__header">
+                <h1 class="upload-area__title">Upload QR</h1>
+                <p class="upload-area__paragraph">
+                    To search about user
+                    <strong class="upload-area__tooltip">
+                        Web App Features
+                        <span class="upload-area__tooltip-data"></span>
+                    </strong>
+                </p>
+            </div>
+            <div id="dropZoon" class="upload-area__drop-zoon drop-zoon">
+                <span class="drop-zoon__icon">
+                    <i class='bx bxs-file-image'></i>
+                </span>
+                <p class="drop-zoon__paragraph">Drop your file here or Click to browse</p>
+                <span id="loadingText" class="drop-zoon__loading-text">Please Wait</span>
+                <img src="" alt="Preview Image" id="previewImage" class="drop-zoon__preview-image" draggable="false">
+                <input type="file" name="fileInput" id="fileInput" class="drop-zoon__file-input" accept="image/*">
+            </div>
+            <div id="fileDetails" class="upload-area__file-details file-details">
+                <div id="uploadedFile" class="uploaded-file">
+                    <div class="uploaded-file__icon-container">
+                        <i class='bx bxs-file-blank uploaded-file__icon'></i>
+                    </div>
+                </div>
+                <button type="submit" role="button" class="button">Search</button>
+            </div>
+            <partial name="_SearchPartial" />
+        </div>
+    </form>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    @await Component.InvokeAsync("Notyf")
+    <script src="~/js/Search.js"></script>
+</body>
+</html>

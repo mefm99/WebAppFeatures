@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = localizer["titlePageCompleted"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (TempData["RegistrationCompleted"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong> @TempData["RegistrationCompleted"] <a asp-action="Login" asp-controller="Account" class="alert-link"> Login Link</a>.</strong>
+    </div>
+}

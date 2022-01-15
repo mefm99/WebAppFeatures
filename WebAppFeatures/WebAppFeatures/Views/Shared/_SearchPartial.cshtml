@@ -1,0 +1,8 @@
+﻿@if (HttpContextAccessor.HttpContext.Session.GetString("UserId") == null)
+{
+    <a asp-controller="Home"  asp-action="Index" class="button">Back To Home</a>
+}
+else
+{
+   <a asp-controller="Dashboard"  asp-action="Index" class="button">Back To Dashboard</a>
+}

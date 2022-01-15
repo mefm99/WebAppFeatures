@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+
+@inject IViewLocalizer localizer
+@inject IOptions<RequestLocalizationOptions> requestLocalizationOption
+@{ 
+    var requestLocalizationOptionValue = Context.Features.Get<IRequestCultureFeature>();
+    var culturesItems = requestLocalizationOption.Value.SupportedCultures
+        .Select(a => new SelectListItem { Value = a.Name, Text = a.NativeName }).ToList();
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+}
+<div title="@localizer["Request Culture Provider:"] @requestLocalizationOptionValue?.Provider?.GetType().Name">
+    <form id="SelectLanguage" method="post" asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl">
+        <select name="culture" onchange="this.form.submit()"
+                asp-for="@requestLocalizationOptionValue.RequestCulture.UICulture.Name"
+                asp-items="@culturesItems">
+        </select>
+    </form>
+</div>

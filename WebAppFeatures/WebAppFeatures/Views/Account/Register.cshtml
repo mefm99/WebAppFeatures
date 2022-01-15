@@ -1,0 +1,50 @@
+﻿@model WebAppFeatures.ViewModel.RegisterViewModel
+
+@{
+    ViewData["Title"] = localizer["tilteRegisterPage"];
+}
+@if (TempData["Registered_Error_Message"] != null)
+{
+<div class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong> @TempData["Registered_Error_Message"]</strong>
+</div>
+}
+@if (TempData["Registered_Success_Message"] != null)
+{
+<div class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong> @TempData["Registered_Success_Message"]</strong>
+</div>
+}
+<div class="row justify-content-md-center m-3">
+    <div class="col-md-6">
+        <h1>@localizer["tilteRegister"]</h1>
+        <form method="post" asp-controller="Account" asp-action="Register" asp-antiforgery="true">
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="off" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="off" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ComparePassword" class="control-label"></label>
+                <input asp-for="ComparePassword" class="form-control" autocomplete="off" />
+                <span asp-validation-for="ComparePassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@localizer["btnRegister"]" class="btn btn-info btn-block" />
+            </div>
+        </form>
+        <div class="form-group">
+            <a asp-action="Login" asp-controller="Account">@localizer["havaAccount"]</a>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
